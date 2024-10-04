@@ -6,7 +6,7 @@ const Apod = () => {
   const [error, setError] = useState(null); // State to handle error
 
   useEffect(() => {
-    // Fetch APOD data from your backend (update with your actual backend URL)
+    // Fetch APOD data from the backend
     const fetchApodData = async () => {
       const currentDate = new Date().toDateString();
       const cacheKey = `{NASA-API-DATA:${currentDate}}`;
@@ -30,7 +30,6 @@ const Apod = () => {
         //Cache today's apod data in local storage
         localStorage.setItem(cacheKey, JSON.stringify(data));
 
-        console.log(data);
         console.log('Fetched from api and cached');
         setApodData(data);
       } catch (err) {
