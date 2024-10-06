@@ -34,6 +34,15 @@ function NeoFeed() {
     setSelectedDate('');
   }, [startDate]);
 
+  // Unified function to update both startDate and endDate
+  const updateDates = newStartDate => {
+    const newStart = new Date(newStartDate);
+    const newEnd = new Date(newStartDate);
+    newEnd.setDate(newEnd.getDate() + 7); // Add 7 days to startDate
+    setStartDate(newStartDate);
+    setEndDate(newEnd.toISOString().split('T')[0]);
+  };
+
   useEffect(() => {
     const fetchNeoFeed = async () => {
       if (!startDate || !endDate) return; // Exit early if either date is not set
@@ -67,6 +76,12 @@ function NeoFeed() {
   if (error) return <div>Error occurred: {error}</div>;
   if (loading) return <div>Loading...</div>;
   if (!neoFeedData) return <div>No data available</div>;
+
+  // Handle the start date change
+  const handleStartDateChange = e => {
+    const newStartDate = e.target.value;
+    updateDates(newStartDate);
+  };
 
   const handleDateSelect = date => {
     setSelectedDate(date);
@@ -168,7 +183,7 @@ function NeoFeed() {
   return (
     <div>
       <h1>Near-Earth Objects Dashboard</h1>
-      <h2>Total NEOs Detected Over Dates</h2>
+      <h2>Total NEOs Detected Over Date(s)</h2>
       {/* Closest Approach Alert Card */}
       {stats?.closestObject && (
         <div className="alert-card">
@@ -241,7 +256,7 @@ function NeoFeed() {
             <input
               type="date"
               value={startDate}
-              onChange={e => setStartDate(e.target.value)}
+              onChange={handleStartDateChange}
             />
             <label>End Date:</label>
             <input type="date" value={endDate} onChange={handleEndDateChange} />
@@ -252,7 +267,7 @@ function NeoFeed() {
             <input
               type="date"
               value={startDate}
-              onChange={e => setStartDate(e.target.value)}
+              onChange={handleStartDateChange}
             />
           </div>
         )}
