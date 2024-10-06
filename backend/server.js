@@ -38,6 +38,46 @@ app.get('/api/apod', async (req, res) => {
   }
 });
 
+app.get('/api/neofeed', async (req, res) => {
+  // Get the current date
+  const today = new Date();
+  const defaulStartDate = today.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+
+  // Get the date 7 days from today
+  const futureDate = new Date();
+  futureDate.setDate(today.getDate() + 7);
+  const defaultEndDate = futureDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+
+  const START_DATE = req.query.start_date || defaulStartDate;
+  const END_DATE = req.query.end_date || defaultEndDate;
+
+  try {
+    const apiUrl = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${START_DATE}&end_date=${END_DATE}&api_key=${NASA_API_KEY}`;
+    console.log(apiUrl);
+    const response = await fetch(apiUrl);
+    // console.log(response);
+    // Check if the response is okay (status code 200-299)
+    if (!response.ok) {
+      // Try to extract the error message from the response
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error_message ||
+          `Failed to fetch data from NASA NEO Feed API: ${apiUrl}`
+      );
+    }
+
+    // Parse the response body as JSON
+    const data = await response.json();
+
+    // Send the data back to the client
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+    // Handle any errors
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Start the Express server on port 5000
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

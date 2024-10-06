@@ -22,6 +22,7 @@ const Apod = () => {
       localStorage.clear();
 
       try {
+        console.log('http://localhost:5000/api/apod');
         const response = await fetch('http://localhost:5000/api/apod');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -30,6 +31,7 @@ const Apod = () => {
         //Cache today's apod data in local storage
         localStorage.setItem(cacheKey, JSON.stringify(data));
 
+        console.log(data);
         console.log('Fetched from api and cached');
         setApodData(data);
       } catch (err) {
