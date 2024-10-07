@@ -22,8 +22,10 @@ const Apod = () => {
       localStorage.clear();
 
       try {
-        console.log('http://localhost:5000/api/apod');
-        const response = await fetch('http://localhost:5000/api/apod');
+        console.log(`${import.meta.env.VITE_BACKEND_URL}/apod`);
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/apod`
+        );
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

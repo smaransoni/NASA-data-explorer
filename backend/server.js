@@ -14,6 +14,10 @@ app.use(cors());
 // NASA API key from environment variables
 const NASA_API_KEY = process.env.NASA_API_KEY;
 
+app.get('/', async (req, res) => {
+  res.json({ site: 'nasa-app' });
+});
+
 // Route to get Astronomy Picture of the Day (APOD) data
 app.get('/api/apod', async (req, res) => {
   try {

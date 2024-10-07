@@ -52,7 +52,9 @@ function NeoFeed() {
 
         setLoading(true);
         const response = await fetch(
-          `http://localhost:5000/api/neofeed?start_date=${START_DATE}&end_date=${END_DATE}`
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/neofeed?start_date=${START_DATE}&end_date=${END_DATE}`
         );
         if (!response.ok) {
           const errorData = await response.json();
